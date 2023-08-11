@@ -9,13 +9,13 @@ const StopsSchedule = ({ stops }) => {
             ? stop.estimated_arrival_time_unix * 1000
             : stop.scheduled_arrival_time_unix * 1000
         );
-        const arrSch = stop.estimated_arrival_time_unix ? true : false;
+        const arrSch = stop.estimated_arrival_time_unix ? false : true;
         const dep = new Date(
           stop.estimated_departure_time_unix
             ? stop.estimated_departure_time_unix * 1000
             : stop.scheduled_departure_time_unix * 1000
         );
-        const depSch = stop.estimated_departure_time_unix ? true : false;
+        const depSch = stop.estimated_departure_time_unix ? false : true;
 
         const dateAndTimeFormatter = new Intl.DateTimeFormat("en-US", {
           month: "short",
