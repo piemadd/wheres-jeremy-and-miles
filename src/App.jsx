@@ -56,7 +56,7 @@ const App = () => {
         // if prev stop is the current stop, make the departure time of this stop the departure time of the next stop
         // also remove the stop from the array
         if (stop.internal_id === stops[i - 1]?.internal_id) {
-          console.log("Shared stop!");
+          //console.log("Shared stop!");
           processedStopsTemp.pop();
 
           stop.live_arrival_time_unix = stops[i - 1].live_arrival_time_unix;
@@ -67,8 +67,6 @@ const App = () => {
             stops[i - 1].live_arrival_time_formatted_local;
           stop.scheduled_arrival_time_formatted_local =
             stops[i - 1].scheduled_arrival_time_formatted_local;
-
-          console.log(stop);
         }
 
         processedStopsTemp.push(stop);
@@ -77,7 +75,11 @@ const App = () => {
         if (i === stops.length - 1) return;
       });
 
-      const activeBus = data.find((bus) => bus.active_vehicle !== null);
+      const activeBus = data.find(
+        (bus) =>
+          bus.active_vehicle !== null &&
+          bus.coachtracker?.status_description !== "Journey Completed"
+      );
 
       if (activeBus) {
         setLat(activeBus.active_vehicle.current_wgs84_latitude_degrees);
@@ -131,7 +133,7 @@ const App = () => {
           marginBottom: "8px",
         }}
       >
-        v1.2.1 | Made by{" "}
+        v1.2.3 | Made by{" "}
         <a href='https://piemadd.com/' target='_blank' rel='noreferrer'>
           Piero
         </a>
