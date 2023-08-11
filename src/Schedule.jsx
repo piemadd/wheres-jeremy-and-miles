@@ -2,7 +2,7 @@ const StopsSchedule = ({ stops }) => {
   return (
     <section className='busStops'>
       {stops.map((stop, i) => {
-        console.log(stop);
+        //console.log(stop);
 
         const arr = new Date(
           stop.estimated_arrival_time_unix

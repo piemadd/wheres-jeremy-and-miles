@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import StopsSchedule from "./Schedule";
 import Map from "./Map";
-import taxiStations from "./stations";
 
 const App = () => {
   const [dataSource, setDataSource] = useState("table");
@@ -49,20 +48,33 @@ const App = () => {
 
       const stops = data.flatMap((bus) => bus.stops);
       stops.forEach((stop, i) => {
-        // if the past stop is the current stop, skip adding this stop
-        if (stop.internal_id === stops[i - 1]?.internal_id) return;
+        if (i === 0) {
+          processedStopsTemp.push(stop);
+          return;
+        }
 
-        // if the last stop of the array, skip
-        if (i === stops.length - 1) return;
+        // if prev stop is the current stop, make the departure time of this stop the departure time of the next stop
+        // also remove the stop from the array
+        if (stop.internal_id === stops[i - 1]?.internal_id) {
+          console.log("Shared stop!");
+          processedStopsTemp.pop();
 
-        // if next stop is the current stop, make the departure time of this stop the departure time of the next stop
-        if (stop.internal_id === stops[i + 1]?.internal_id) {
-          stop.live_departure_time_unix = stops[i + 1].live_departure_time_unix;
-          stop.scheduled_departure_time_unix =
-            stops[i + 1].scheduled_departure_time_unix;
+          stop.live_arrival_time_unix = stops[i - 1].live_arrival_time_unix;
+          stop.scheduled_arrival_time_unix =
+            stops[i - 1].scheduled_arrival_time_unix;
+
+          stop.live_arrival_time_formatted_local =
+            stops[i - 1].live_arrival_time_formatted_local;
+          stop.scheduled_arrival_time_formatted_local =
+            stops[i - 1].scheduled_arrival_time_formatted_local;
+
+          console.log(stop);
         }
 
         processedStopsTemp.push(stop);
+
+        // if the last stop of the array, skip
+        if (i === stops.length - 1) return;
       });
 
       const activeBus = data.find((bus) => bus.active_vehicle !== null);
@@ -106,16 +118,20 @@ const App = () => {
     <>Loading app data...</>
   ) : (
     <>
-      <h1 style={{
-        textAlign: 'center',
-        marginTop: '8px'
-      }}>Where&apos;s Jeremy and Miles?</h1>
+      <h1
+        style={{
+          textAlign: "center",
+          marginTop: "8px",
+        }}
+      >
+        Where&apos;s Jeremy and Miles?
+      </h1>
       <p
         style={{
           marginBottom: "8px",
         }}
       >
-        v0.1.0 | Made by{" "}
+        v1.2.0 | Made by{" "}
         <a href='https://piemadd.com/' target='_blank' rel='noreferrer'>
           Piero
         </a>
@@ -160,7 +176,7 @@ const App = () => {
                 display: dataSource === "table" ? "block" : "none",
               }}
             >
-              <StopsSchedule stops={processedStops}/>
+              <StopsSchedule stops={processedStops} />
             </div>
 
             <div
@@ -173,7 +189,7 @@ const App = () => {
             <p
               style={{
                 textAlign: "center",
-                marginTop: '8px'
+                marginTop: "8px",
               }}
             >
               This site is unofficial and not affiliated with neither Miles
