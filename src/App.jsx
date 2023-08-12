@@ -91,7 +91,7 @@ const App = () => {
           .filter((stop) => stop.live_departure_time_unix === null)
           .sort((a, b) => {
             return (
-              b.scheduled_departure_time_unix - a.scheduled_departure_time_unix
+              a.scheduled_departure_time_unix - b.scheduled_departure_time_unix
             );
           })[0];
 
