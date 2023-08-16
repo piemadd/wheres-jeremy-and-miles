@@ -1,6 +1,9 @@
 const StopsSchedule = ({ stops }) => {
   return (
     <section className='busStops'>
+      {stops.length === 0 && (
+        <p>Miles and/or Jeremy currently aren't publicly traveling :c</p>
+      )}
       {stops.map((stop, i) => {
         //console.log(stop);
 

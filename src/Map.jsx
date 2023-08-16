@@ -12,7 +12,7 @@ const Map = ({ pointLat, pointLon, stops }) => {
   const map = useRef(null);
   const [lng] = useState(pointLon);
   const [lat] = useState(pointLat);
-  const [zoom] = useState(5);
+  const [zoom] = useState(3.5);
 
   let protocol = new pmtiles.Protocol();
   maplibregl.addProtocol("pmtiles", protocol.tile);
@@ -81,6 +81,8 @@ const Map = ({ pointLat, pointLon, stops }) => {
           `Map moved to ${map.current.getCenter()} with zoom ${map.current.getZoom()}`
         );
       });
+
+      if (stops.length === 0) return;
 
       stops.forEach((stop, i) => {
         const dateAndTimeFormatter = new Intl.DateTimeFormat("en-US", {
